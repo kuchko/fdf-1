@@ -29,11 +29,6 @@ static size_t	ft_intlen(int n)
 	return (i);
 }
 
-static int		ft_abs(int n)
-{
-	return (n < 0 ? -n : n);
-}
-
 char			*ft_itoa(int n)
 {
 	size_t		len;
@@ -46,12 +41,12 @@ char			*ft_itoa(int n)
 			res[0] = '-';
 		if (n == 0)
 		{
-			res[0] = ft_abs(n) + '0';
+			res[0] = ABS(n) + '0';
 			return (res);
 		}
 		while (n != 0)
 		{
-			res[len] = ft_abs(n % 10) + '0';
+			res[len] = ABS(n % 10) + '0';
 			n /= 10;
 			len--;
 		}

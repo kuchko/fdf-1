@@ -5,92 +5,94 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrudyka <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/13 13:10:07 by vrudyka           #+#    #+#             */
-/*   Updated: 2018/12/13 13:10:08 by vrudyka          ###   ########.fr       */
+/*   Created: 2019/01/17 14:51:44 by vrudyka           #+#    #+#             */
+/*   Updated: 2019/01/17 14:51:46 by vrudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void		lowline(double x, double y, double x1, double y1, t_mlx *mlx)
+static void		pixel_put(t_img *img, t_var *var, int x, int y)
 {
-	double		distance;
-	double		diffx;
-	double		diffy;
-	int			flag;
+	int			i;
 
-	diffx = x1 - x;
-	diffy = y1 - y;
-	flag = 1;
-	if (diffy < 0)
+
+	x += ((var->width * var->s_max )/ 2);
+	y += ((var->height * var->s_max )/ 2);
+	i = (y * WIN_WIDTH) + x;
+	((t_color *)img->addr)[i].r = 255;
+	((t_color *)img->addr)[i].g = 255;
+	((t_color *)img->addr)[i].b = 0;
+	((t_color *)img->addr)[i].a = 0;
+}
+
+static int		swapper(int *x0, int *y0, int *x1, int *y1)
+{
+	int			steep;
+
+	steep = 0;
+
+	if (ABS((*x0) - (*x1)) < ABS((*y0) - (*y1)))
 	{
-		flag = -1;
-		diffy *= -1;
+		ft_swap(x0, y0);
+		ft_swap(x1, y1);
+		steep = 1;
 	}
-	distance = (2 * diffy) - diffx;
-	printf("low: x %f x1 %f\n", x, x1);
-	//mlx_pixel_put(mlx->ptr, mlx->win, x + 50, y + 50, 0x00FFFFFF);
-	while (x < x1)
+	if ((*x0) > (*x1))
 	{
-		mlx_pixel_put(mlx->ptr, mlx->win, x, y, 0x00FFFFFF);
-		if (distance > 0)
-		{
-			y = y + flag;
-			distance = distance - (2 * diffx);
-		}
-		distance = distance + (2 * diffy);
-		x++;
+		ft_swap(x0, x1);
+		ft_swap(y0, y1);
+	}
+	return (steep);
+}
+
+static void		line_draw(t_img *img, t_var *var, t_point zero, t_point one)
+{
+	int			steep;
+
+	steep = swapper(&(zero.x), &(zero.y), &(one.x), &(one.y));
+	(*var).dx = one.x - zero.x;
+	(*var).dy = one.y - zero.y;
+	(*var).err = ABS(2 * (*var).dy);
+	(*var).derr = 0;
+	(*var).x = zero.x;
+	(*var).y = zero.y;
+	while ((*var).x < one.x || (*var).y < one.y)
+	{
+		if (steep)
+			pixel_put(img, var, (*var).y, (*var).x);
+		else
+			pixel_put(img, var,(*var).x, (*var).y);
+		(*var).derr += (*var).err;
+		if ((*var).derr > (*var).dx)
+			{
+				(*var).y += (one.y > zero.y ? 1 : -1);
+				(*var).derr -= (*var).dx * 2;
+			}
+		if ((*var).x < one.x)
+			(*var).x++;
 	}
 }
 
-static void		highline(double x, double y, double x1, double y1, t_mlx *mlx)
+void			display(t_img *img, t_var *var)
 {
-	double		distance;
-	int			diffx;
-	int			diffy;
-	int			flag;
+	int			y;
+	int			x;
+	t_point		**map;
 
-	diffx = x1 - x;
-	diffy = y1 - y;
-	flag = 1;
-	if (diffx < 0)
+	y = 0;
+	map = var->map;
+	while (y < var->height)
 	{
-		flag = -1;
-		diffx *= -1;
-	}
-	distance = (2 * diffx) - diffy;
-	printf("high: x %f y %f\n", x, y);
-	while (y < y1)
-	{
-		mlx_pixel_put(mlx->ptr, mlx->win, x, y, 0x00FFFFFF);
-		if (distance > 0)
+		x = 0;
+		while (x < var->width)
 		{
-			x = x + flag;
-			distance = distance - (2 * diffy);
+			if (x + 1 != var->width)
+				line_draw(img, var, map[y][x], map[y][x + 1]);
+			if (y + 1 != var->height)
+				line_draw(img, var, map[y + 1][x], map[y][x]);
+			x++;
 		}
-		distance = distance + (2 * diffx);
-		x++;
-	}
-}
-
-void			line_draw(t_fils *fils, t_mlx *mlx)
-{
-	t_fils		*point;
-
-	//printf("x: %f | y: %f\n", fils->x, fils->y);
-	point = fils;
-	if (ABS(point->next->y - point->y) > ABS(point->next->x - point->x)) /*vertical or horizontal*/
-	{
-		if (point->x > point->next->x) /*if drawing the line downwards*/
-			lowline(point->next->x, point->next->y, point->x, point->y, mlx);
-		else /*if drawing the line upward*/
-			lowline(point->x, point->y, point->next->x, point->next->y, mlx);
-	}
-	else
-	{
-		if (point->y > point->next->y) /*drawing the light right*/
-			highline(point->next->x, point->next->y, point->x, point->y, mlx);
-		else /*drawing the light left*/
-			highline(point->x, point->y, point->next->x, point->next->y, mlx);
+		y++;
 	}
 }

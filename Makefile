@@ -16,26 +16,29 @@ SRC_DIR :=			./src/
 OBJ_DIR :=			./obj/
 INC_DIR :=			./inc/
 
-SRC :=				main.c fils_gen.c line_draw.c
+SRC :=				main.c parsing_fdf.c line_draw.c controls.c
 OBJ =				$(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
 LIBFT =				$(LIBFT_DIR)libft.a
 LIBFT_DIR :=		$(LIB_DIR)libft/
 LIBFT_INC :=		$(LIBFT_DIR)includes/
 LIBFT_FLAGS :=		-lft -L $(LIBFT_DIR)
+
+MLX_INC :=			/usr/local/include
 MLX_FLAGS :=		-L /usr/local/lib/ -lmlx
+
 FRAMEWORKS :=		-framework OpenGL -framework AppKit
 
 CC_FLAGS :=			-Wall -Wextra -Werror
 LINK_FLAGS :=		$(MLX_FLAGS) $(LIBFT_FLAGS)
-HEADER_FLAGS :=		-I $(INC_DIR)  -I $(LIBFT_INC)
+HEADER_FLAGS :=		-I $(INC_DIR)  -I $(LIBFT_INC) -I $(MLX_INC)
 
 CC :=				gcc
 
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJ)
-		gcc $(OBJ) -I /usr/local/include $(LINK_FLAGS) $(FRAMEWORKS) -o $(NAME)
+		gcc $(OBJ) $(LINK_FLAGS) $(FRAMEWORKS) -o $(NAME)
 
 $(OBJ): | $(OBJ_DIR)
 
