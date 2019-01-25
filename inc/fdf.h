@@ -16,8 +16,15 @@
 # define WIN_HEIGHT 729
 # define WIN_WIDTH 1280
 # define X_MASK 0
+
 # define ESC 53
-# define NUM_PAD_6 88
+# define ARROW_L 123
+# define ARROW_R 124
+# define ARROW_UP 126
+# define MAIN_KEY_R 15
+# define MAIN_KEY_B 11
+# define MAIN_KEY_G 5
+
 # include <libft.h>
 # include <fcntl.h>
 # include "mlx.h"
@@ -36,6 +43,15 @@ typedef	struct		s_img
 	int				endian;
 }					t_img;
 
+
+typedef struct		s_color
+{
+	unsigned char	b;
+	unsigned char	g;
+	unsigned char	r;
+	unsigned char	a;
+}					t_color;
+
 typedef	struct		s_point
 {
 	int				x;
@@ -49,28 +65,23 @@ typedef	struct		s_var
 	int				height;
 	int				width;
 	int				s_max;
-	t_point			**map;
-	int				y;
+	int				color;
 	int				x;
+	int				y;
+	int				z;
 	int				dx;
 	int				dy;
 	int				err;
 	int				derr;
+	t_point			**map;
+	t_img			*img;
 }					t_var;
-
-typedef struct		s_color
-{
-	unsigned char	b;
-	unsigned char	g;
-	unsigned char	r;
-	unsigned char	a;
-}					t_color;
 
 char				*parsing_fdf(int fd, t_var **var);
 
 t_point				**parsing_line(t_var *var, char *line);
 
-void				display(t_img *img, t_var *var);
+void				display(t_var *var);
 
 int					terminate(int error);
 
@@ -78,6 +89,10 @@ int					X(void *param);
 
 int					terminate(int error);
 
-int					key_down(int key, void *param);
+int					key_down(int key, t_var *var);
+
+void				rotate(t_var *var, char axis);
+
+void				color_assign(t_var *var, int key);
 
 #endif

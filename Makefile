@@ -16,7 +16,7 @@ SRC_DIR :=			./src/
 OBJ_DIR :=			./obj/
 INC_DIR :=			./inc/
 
-SRC :=				main.c parsing_fdf.c line_draw.c controls.c
+SRC :=				main.c parsing_fdf.c line_draw.c controls.c transform.c color.c
 OBJ =				$(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
 LIBFT =				$(LIBFT_DIR)libft.a

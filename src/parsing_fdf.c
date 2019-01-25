@@ -85,7 +85,7 @@ t_point			**parsing_line(t_var *var, char *line)
 		{
 			map[y][x].x = (x * var->s_max) - ((var->width * var->s_max )/ 2);
 			map[y][x].y = (y * var->s_max) - ((var->height * var->s_max )/ 2);
-			map[y][x].z = ft_atoi(*split) * var->s_max;
+			map[y][x].z = ft_atoi(*split) * 10;// * var->s_max;
 			//printf("x: %d y: %d z: %d\n", map[y][x].x, map[y][x].y, map[y][x].z);
 			split++;
 		}

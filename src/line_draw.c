@@ -19,11 +19,14 @@ static void		pixel_put(t_img *img, t_var *var, int x, int y)
 
 	x += ((var->width * var->s_max )/ 2);
 	y += ((var->height * var->s_max )/ 2);
-	i = (y * WIN_WIDTH) + x;
-	((t_color *)img->addr)[i].r = 255;
-	((t_color *)img->addr)[i].g = 255;
-	((t_color *)img->addr)[i].b = 0;
-	((t_color *)img->addr)[i].a = 0;
+	if ((x >= 0 && x < WIN_WIDTH) && (y >= 0 && y < WIN_HEIGHT))
+	{
+		i = (y * WIN_WIDTH) + x;
+		((t_color *)img->addr)[i].r = (var->color >> 16) & 0xFF;
+		((t_color *)img->addr)[i].g = (var->color >> 8) & 0xFF;
+		((t_color *)img->addr)[i].b = (var->color) & 0xFF;
+		((t_color *)img->addr)[i].a = 0;
+	}
 }
 
 static int		swapper(int *x0, int *y0, int *x1, int *y1)
@@ -59,9 +62,9 @@ static void		line_draw(t_img *img, t_var *var, t_point zero, t_point one)
 	(*var).y = zero.y;
 	while ((*var).x < one.x || (*var).y < one.y)
 	{
-		if (steep)
+		if (steep && (*var).x < WIN_WIDTH && (*var).y < WIN_HEIGHT)
 			pixel_put(img, var, (*var).y, (*var).x);
-		else
+		else if ((*var).x < WIN_WIDTH && (*var).y < WIN_HEIGHT)
 			pixel_put(img, var,(*var).x, (*var).y);
 		(*var).derr += (*var).err;
 		if ((*var).derr > (*var).dx)
@@ -74,13 +77,15 @@ static void		line_draw(t_img *img, t_var *var, t_point zero, t_point one)
 	}
 }
 
-void			display(t_img *img, t_var *var)
+void			display(t_var *var)
 {
 	int			y;
 	int			x;
+	t_img		*img;
 	t_point		**map;
 
 	y = 0;
+	img = var->img;
 	map = var->map;
 	while (y < var->height)
 	{
@@ -95,4 +100,5 @@ void			display(t_img *img, t_var *var)
 		}
 		y++;
 	}
+	mlx_put_image_to_window(img->mlx_ptr, img->mlx_win, img->ptr, 50, 50);
 }

@@ -31,11 +31,17 @@ int				terminate(int error)
 	return (0);
 }
 
-int				key_down(int key, void *param)
+int				key_down(int key, t_var *var)
 {
-	param = NULL;
 	if (key == ESC)
 		exit(0);
-//	if (key == NUM_PAD_6)
+	else if (key == ARROW_UP)
+		rotate(var, 'x');
+	else if (key == ARROW_L)
+		rotate(var, 'y');
+	else if (key == ARROW_R)
+		rotate(var, 'z');
+	else if (key == MAIN_KEY_R || key + MAIN_KEY_B)
+		color_assign(var, key);
 	return (0);
 }
