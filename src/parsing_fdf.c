@@ -31,7 +31,7 @@ static char		*ft_strjoin_free(char *line, char *buf, int width)
 
 	point = line;
 	if (width_count(buf) != width)
-		terminate(73);
+		terminate("Invalid map");
 	line = ft_strjoin(line, " ");
 	line = ft_strjoin(line, buf);
 	free(point);

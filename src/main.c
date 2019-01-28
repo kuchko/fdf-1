@@ -37,13 +37,13 @@ int				main(int ac, char **av)
 	t_var		*var;
 
 	if ((fd = open(av[1], O_RDONLY)) < 3)
-		terminate(70);
+		terminate("No such file");
 	if (ac != 2 || !(ft_strstr(av[1], ".fdf")))
-		terminate(85);
+		terminate("usage: ./fdf [file_name.fdf]");
 	var = (t_var*)malloc(sizeof(t_var));
 	var->img = init_img();
-	var->map = parsing_line(var, parsing_fdf(fd, &var));
-	var->color = 0xFF00FF;
+	var->map_o = parsing_line(var, parsing_fdf(fd, &var));
+	var->color_1 = 0xFF00FF;
 	display(var);
 	key_init(var);
 	mlx_loop(var->img->mlx_ptr);

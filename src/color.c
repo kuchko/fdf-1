@@ -15,10 +15,10 @@
 void			color_assign(t_var *var, int key)
 {
 	if (key == MAIN_KEY_R)
-		var->color = 0xFF00FF;
+		var->color_1 = 0xFF00FF;
 	else if (key == MAIN_KEY_B)
-		var->color = 0x27AEE3;
+		var->color_1 = 0x27AEE3;
 	else if (key == MAIN_KEY_G)
-		var->color = 0x2E8B57;
+		var->color_1 = 0x2E8B57;
 	display(var);
 }

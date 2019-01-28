@@ -15,6 +15,7 @@
 
 # define WIN_HEIGHT 729
 # define WIN_WIDTH 1280
+# define TURN_A 0.1125
 # define X_MASK 0
 
 # define ESC 53
@@ -24,6 +25,7 @@
 # define MAIN_KEY_R 15
 # define MAIN_KEY_B 11
 # define MAIN_KEY_G 5
+# define MAIN_KEY_I 34
 
 # include <libft.h>
 # include <fcntl.h>
@@ -43,6 +45,13 @@ typedef	struct		s_img
 	int				endian;
 }					t_img;
 
+typedef	struct		s_point
+{
+	int				x;
+	int				y;
+	int				z;
+	int				color;
+}					t_point;
 
 typedef struct		s_color
 {
@@ -52,20 +61,21 @@ typedef struct		s_color
 	unsigned char	a;
 }					t_color;
 
-typedef	struct		s_point
+typedef	struct		s_rot
 {
-	int				x;
-	int				y;
-	int				z;
-	int				color;
-}					t_point;
+	double			x;
+	double			y;
+	double			z;
+}					t_rot;
 
 typedef	struct		s_var
 {
 	int				height;
 	int				width;
 	int				s_max;
-	int				color;
+	int				gradient;
+	int				color_1;
+	int				color_2;
 	int				x;
 	int				y;
 	int				z;
@@ -73,7 +83,8 @@ typedef	struct		s_var
 	int				dy;
 	int				err;
 	int				derr;
-	t_point			**map;
+	t_point			**map_r;
+	t_point			**map_o;
 	t_img			*img;
 }					t_var;
 
@@ -83,16 +94,16 @@ t_point				**parsing_line(t_var *var, char *line);
 
 void				display(t_var *var);
 
-int					terminate(int error);
+int					terminate(char *str);
 
 int					X(void *param);
 
-int					terminate(int error);
-
 int					key_down(int key, t_var *var);
 
-void				rotate(t_var *var, char axis);
+void				rotate(t_var *var, char axis, t_rot **rot);
 
 void				color_assign(t_var *var, int key);
+
+void				iso(t_var *var);
 
 #endif
