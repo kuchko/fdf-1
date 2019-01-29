@@ -1,81 +1,65 @@
-NAME = fdf
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: vrudyka <marvin@42.fr>                     +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2018/12/12 20:28:36 by vrudyka           #+#    #+#              #
+#    Updated: 2018/12/12 20:28:37 by vrudyka          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-CC = gcc
-FLAGS = -Wall -Werror -Wextra -O3
-LIBRARIES = -lmlx -lm -lft -L$(LIBFT_DIRECTORY) -L$(MINILIBX_DIRECTORY) -framework OpenGL -framework AppKit
-INCLUDES = -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADERS) -I$(MINILIBX_HEADERS)
+NAME :=				fdf
 
-LIBFT = $(LIBFT_DIRECTORY)libft.a
-LIBFT_DIRECTORY = ./libft/
-LIBFT_HEADERS = $(LIBFT_DIRECTORY)includes/
+SRC_DIR :=			./src/
+OBJ_DIR :=			./obj/
+INC_DIR :=			./inc/
 
-MINILIBX = $(MINILIBX_DIRECTORY)libmlx.a
-MINILIBX_DIRECTORY = ./minilibx_macos/
-MINILIBX_HEADERS = $(MINILIBX_DIRECTORY)
+SRC :=				main.c parsing_fdf.c line_draw.c controls.c transform.c color.c
+OBJ =				$(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
-HEADERS_LIST = fdf.h
-HEADERS_DIRECTORY = ./inc/
-HEADERS = $(addprefix $(HEADERS_DIRECTORY), $(HEADERS_LIST))
+LIBFT =				$(LIBFT_DIR)libft.a
+LIBFT_DIR :=		$(LIB_DIR)libft/
+LIBFT_INC :=		$(LIBFT_DIR)includes/
+LIBFT_FLAGS :=		-lft -L $(LIBFT_DIR)
 
-SOURCES_DIRECTORY = ./src/
-SOURCES_LIST = main.c\
-	color.c\
-	controls.c\
-	line_draw.c\
-	parsing_fdf.c\
-	transform.c
-SOURCES = $(addprefix $(SOURCES_DIRECTORY), $(SOURCES_LIST))
+MLX_INC :=			/usr/local/include
+MLX_FLAGS :=		-L /usr/local/lib/ -lmlx
 
-OBJECTS_DIRECTORY = obj/
-OBJECTS_LIST = $(patsubst %.c, %.o, $(SOURCES_LIST))
-OBJECTS	= $(addprefix $(OBJECTS_DIRECTORY), $(OBJECTS_LIST))
+FRAMEWORKS :=		-framework OpenGL -framework AppKit
 
-# COLORS
+CC_FLAGS :=			-Wall -Wextra -Werror
+LINK_FLAGS :=		$(MLX_FLAGS) $(LIBFT_FLAGS)
+HEADER_FLAGS :=		-I $(INC_DIR)  -I $(LIBFT_INC) -I $(MLX_INC)
 
-GREEN = \033[0;32m
-RED = \033[0;31m
-RESET = \033[0m
-
-.PHONY: all clean fclean re
+CC :=				gcc
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(MINILIBX) $(OBJECTS_DIRECTORY) $(OBJECTS)
-	@$(CC) $(FLAGS) $(LIBRARIES) $(INCLUDES) $(OBJECTS) -o $(NAME)
-	@echo "\n$(NAME): $(GREEN)object files were created$(RESET)"
-	@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
+$(NAME): $(LIBFT) $(OBJ)
+		gcc $(OBJ) $(LINK_FLAGS) $(FRAMEWORKS) -o $(NAME)
 
-$(OBJECTS_DIRECTORY):
-	@mkdir -p $(OBJECTS_DIRECTORY)
-	@echo "$(NAME): $(GREEN)$(OBJECTS_DIRECTORY) was created$(RESET)"
+$(OBJ): | $(OBJ_DIR)
 
-$(OBJECTS_DIRECTORY)%.o : $(SOURCES_DIRECTORY)%.c $(HEADERS)
-	@$(CC) $(FLAGS) -c $(INCLUDES) $< -o $@
-	@echo "$(GREEN).$(RESET)\c"
+$(OBJ_DIR):
+		mkdir $(OBJ_DIR)
+
+$(OBJ_DIR)%.o: %.c
+		$(CC) -c $< -o $@ $(CC_FLAGS) $(HEADER_FLAGS)
 
 $(LIBFT):
-	@echo "$(NAME): $(GREEN)Creating $(LIBFT)...$(RESET)"
-	@$(MAKE) -sC $(LIBFT_DIRECTORY)
-
-$(MINILIBX):
-	@echo "$(NAME): $(GREEN)Creating $(MINILIBX)...$(RESET)"
-	@$(MAKE) -sC $(MINILIBX_DIRECTORY)
+		make -C $(LIBFT_DIR)
 
 clean:
-	@$(MAKE) -sC $(LIBFT_DIRECTORY) clean
-	@$(MAKE) -sC $(MINILIBX_DIRECTORY) clean
-	@rm -rf $(OBJECTS_DIRECTORY)
-	@echo "$(NAME): $(RED)$(OBJECTS_DIRECTORY) was deleted$(RESET)"
-	@echo "$(NAME): $(RED)object files were deleted$(RESET)"
+		rm -f $(OBJ)
+		make clean -C $(LIBFT_DIR)
 
 fclean: clean
-	@rm -f $(MINILIBX)
-	@echo "$(NAME): $(RED)$(MINILIBX) was deleted$(RESET)"
-	@rm -f $(LIBFT)
-	@echo "$(NAME): $(RED)$(LIBFT) was deleted$(RESET)"
-	@rm -f $(NAME)
-	@echo "$(NAME): $(RED)$(NAME) was deleted$(RESET)"
+		rm -f $(NAME)
+		rm -rf $(OBJ_DIR)
+		make fclean -C $(LIBFT_DIR)
 
-re:
-	@$(MAKE) fclean
-	@$(MAKE) all
+re: fclean all
+
+vpath %.c $(SRC_DIR)

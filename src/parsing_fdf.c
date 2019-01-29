@@ -31,7 +31,7 @@ static char		*ft_strjoin_free(char *line, char *buf, int width)
 
 	point = line;
 	if (width_count(buf) != width)
-		terminate("Invalid map");
+		terminate(73);
 	line = ft_strjoin(line, " ");
 	line = ft_strjoin(line, buf);
 	free(point);
@@ -75,6 +75,8 @@ t_point			**parsing_line(t_var *var, char *line)
 	t_point		**map;
 
 	y = -1;
+	if (var->s_max > 48)
+		var->s_max = 48;
 	map = (t_point**)malloc(sizeof(t_point*) * var->height);
 	split = ft_strsplit(line, ' ');
 	while (++y < var->height)

@@ -25,7 +25,6 @@
 # define MAIN_KEY_R 15
 # define MAIN_KEY_B 11
 # define MAIN_KEY_G 5
-# define MAIN_KEY_I 34
 
 # include <libft.h>
 # include <fcntl.h>
@@ -45,13 +44,6 @@ typedef	struct		s_img
 	int				endian;
 }					t_img;
 
-typedef	struct		s_point
-{
-	int				x;
-	int				y;
-	int				z;
-	int				color;
-}					t_point;
 
 typedef struct		s_color
 {
@@ -60,6 +52,13 @@ typedef struct		s_color
 	unsigned char	r;
 	unsigned char	a;
 }					t_color;
+
+typedef	struct		s_point
+{
+	int				x;
+	int				y;
+	int				z;
+}					t_point;
 
 typedef	struct		s_rot
 {
@@ -73,18 +72,17 @@ typedef	struct		s_var
 	int				height;
 	int				width;
 	int				s_max;
-	int				gradient;
-	int				color_1;
-	int				color_2;
+	int				color;
+	int				flag;
+	int				sy;
 	int				x;
 	int				y;
-//	int				z;
 	int				dx;
 	int				dy;
 	int				err;
 	int				derr;
-	t_point			**map_r;
 	t_point			**map_o;
+	t_point			**map_r;
 	t_img			*img;
 }					t_var;
 
@@ -94,16 +92,16 @@ t_point				**parsing_line(t_var *var, char *line);
 
 void				display(t_var *var);
 
-int					terminate(char *str);
+int					terminate(int error);
 
 int					X(void *param);
+
+int					terminate(int error);
 
 int					key_down(int key, t_var *var);
 
 void				rotate(t_var *var, char axis, t_rot **rot);
 
 void				color_assign(t_var *var, int key);
-
-void				iso(t_var *var);
 
 #endif

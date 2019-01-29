@@ -22,7 +22,7 @@ static t_point	rotate_axis(t_point map, t_rot **rot)
 	y = map.y;
 	z = map.z;
 	if ((*rot)->x != 0.0)
-	{	
+	{
 		map.y = (y * cos((*rot)->x)) + (z * sin((*rot)->x));
 		map.z = -(y * sin((*rot)->x)) + (z * cos((*rot)->x));
 	}
@@ -67,30 +67,6 @@ void			rotate(t_var *var, char axis, t_rot **rot)
 		while (++x < var->width)
 			var->map_r[y][x] = rotate_axis(map_o[y][x], rot);
 	}
-	display(var);
-}
-
-void			iso(t_var *var)
-{
-	int			y;
-	int			x;
-	t_point		**map_o;
-
-	y = -1;
-	map_o = var->map_o;
-	var->map_r = (t_point**)malloc(sizeof(t_point*) * var->height);
-	ft_bzero(var->img->addr, WIN_HEIGHT * WIN_WIDTH * 4);
-	while (++y < var->height)
-	{
-		x = -1;
-		var->map_r[y] = (t_point*)malloc(sizeof(t_point) * var->width);
-		while (++x < var->width)
-		{
-			var->x = var->map_o[y][x].x;
-			var->y = var->map_o[y][x].y;
-			var->map_r[y][x].x = (var->x - var->y) * cos(0.46373398);
-			var->map_r[y][x].y = -(var->map_o[y][x].z) + ((var->x + var->y) * sin(0.46373398));
-		}
-	}
+	var->flag = 1;
 	display(var);
 }
