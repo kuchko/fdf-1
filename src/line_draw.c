@@ -34,7 +34,6 @@ static int		swapper(int *x0, int *y0, int *x1, int *y1)
 	int			steep;
 
 	steep = 0;
-
 	if (ABS((*x0) - (*x1)) < ABS((*y0) - (*y1)))
 	{
 		ft_swap(x0, y0);
@@ -49,22 +48,22 @@ static int		swapper(int *x0, int *y0, int *x1, int *y1)
 	return (steep);
 }
 
-void		line_draw(t_img *img, t_var *var, t_point zero, t_point one)
+void			line_draw(t_img *img, t_var *var, t_point zero, t_point one)
 {
 	int			steep;
 
 	steep = swapper(&(zero.x), &(zero.y), &(one.x), &(one.y));
 	(*var).dx = one.x - zero.x;
 	(*var).dy = one.y - zero.y;
-	(*var).err = ABS(2 * (*var).dy);
+	(*var).err = ABS((*var).dy) * 2;
 	(*var).derr = 0;
 	(*var).x = zero.x;
 	(*var).y = zero.y;
 	while ((*var).x < one.x || (*var).y < one.y)
 	{
-		if (steep && (*var).x < WIN_WIDTH && (*var).y < WIN_HEIGHT)
+		if (steep && ((*var).x < WIN_WIDTH || (*var).y < WIN_HEIGHT))
 			pixel_put(img, var, (*var).y, (*var).x);
-		else if ((*var).x < WIN_WIDTH && (*var).y < WIN_HEIGHT)
+		else if ((*var).x < WIN_WIDTH || (*var).y < WIN_HEIGHT)
 			pixel_put(img, var,(*var).x, (*var).y);
 		(*var).derr += (*var).err;
 		if ((*var).derr > (*var).dx)
@@ -72,7 +71,7 @@ void		line_draw(t_img *img, t_var *var, t_point zero, t_point one)
 				(*var).y += (one.y > zero.y ? 1 : -1);
 				(*var).derr -= (*var).dx * 2;
 			}
-		if ((*var).x < one.x)
+		else if ((*var).x < one.x)
 			(*var).x++;
 	}
 }
@@ -100,5 +99,5 @@ void			display(t_var *var)
 		}
 	}
 	mlx_put_image_to_window((*var).img->mlx_ptr, (*var).img->mlx_win,
-			(*var).img->ptr, 50, 50);
+			(*var).img->ptr, 0, 0);
 }

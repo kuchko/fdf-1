@@ -31,7 +31,22 @@ static t_point	rotate_axis(t_point map, t_rot **rot)
 		map.x = (x * cos((*rot)->y)) + (z * sin((*rot)->y));
 		map.z = -(x * sin((*rot)->y)) + (z * cos((*rot)->y));
 	}
+	if ((*rot)->z != 0.0)
+	{
+		map.x = (x * cos((*rot)->z)) - (y * sin((*rot)->z));
+		map.y = (x * sin((*rot)->z)) + (y * cos((*rot)->z));
+	}
 	return(map);
+}
+
+static void		increment_axis(char axis, t_rot **rot)
+{
+	if (axis == 'x')
+		(*rot)->x += TURN_A;
+	if (axis == 'y')
+		(*rot)->y += TURN_A;
+	if (axis == 'z')
+		(*rot)->z += TURN_A;
 }
 
 void			rotate(t_var *var, char axis, t_rot **rot)
@@ -42,7 +57,7 @@ void			rotate(t_var *var, char axis, t_rot **rot)
 
 	y = -1;
 	map_o = var->map_o;
-	(axis == 'x') ? ((*rot)->x += TURN_A) : ((*rot)->y += TURN_A);
+	increment_axis(axis, rot);
 	var->map_r = (t_point**)malloc(sizeof(t_point*) * var->height);
 	ft_bzero(var->img->addr, WIN_HEIGHT * WIN_WIDTH * 4);
 	while (++y < var->height)
@@ -74,25 +89,8 @@ void			iso(t_var *var)
 			var->x = var->map_o[y][x].x;
 			var->y = var->map_o[y][x].y;
 			var->map_r[y][x].x = (var->x - var->y) * cos(0.46373398);
-			var->map_r[y][x].y = -(var->map_o[y][x].z) + (var->x + var->y)
-					* sin(0.46373398);
+			var->map_r[y][x].y = -(var->map_o[y][x].z) + ((var->x + var->y) * sin(0.46373398));
 		}
 	}
 	display(var);
 }
-
-	// if ((*rot)->z != 0.0)
-	// {
-	// 	map.x = (x * cos((*rot)->z)) - (y * sin((*rot)->z));
-	// 	map.y = (x * sin((*rot)->z)) + (y * cos((*rot)->z));
-	// }
-
-// 	static void		increment_axis(char axis, t_rot **rot)
-// {
-// 	if (axis == 'x')
-// 		(*rot)->x += TURN_A;
-// 	if (axis == 'y')
-// 		(*rot)->y += TURN_A;
-// 	if (axis == 'z')
-// 		(*rot)->z += TURN_A;
-// }

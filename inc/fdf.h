@@ -78,7 +78,7 @@ typedef	struct		s_var
 	int				color_2;
 	int				x;
 	int				y;
-	int				z;
+//	int				z;
 	int				dx;
 	int				dy;
 	int				err;

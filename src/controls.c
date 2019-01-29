@@ -43,12 +43,11 @@ int					key_down(int key, t_var *var)
 		rotate(var, 'x', &rot);
 	else if (key == ARROW_L)
 		rotate(var, 'y', &rot);
+	else if (key == ARROW_R)
+		rotate(var, 'z', &rot);
 	else if (key == MAIN_KEY_I)
 		iso(var);
 	else if (key == MAIN_KEY_R || key + MAIN_KEY_B)
 		color_assign(var, key);
 	return (0);
 }
-
-	// else if (key == ARROW_R)
-	// 	rotate(var, 'z', &rot);
