@@ -29,6 +29,9 @@ MLX_FLAGS :=		-L /usr/local/lib/ -lmlx
 
 FRAMEWORKS :=		-framework OpenGL -framework AppKit
 
+HEADER :=			fdf.h
+I_HEADER :=			$(addprefix $(INC_DIR), $(HEADER))
+
 CC_FLAGS :=			-Wall -Wextra -Werror
 LINK_FLAGS :=		$(MLX_FLAGS) $(LIBFT_FLAGS)
 HEADER_FLAGS :=		-I $(INC_DIR)  -I $(LIBFT_INC) -I $(MLX_INC)
@@ -37,7 +40,7 @@ CC :=				gcc
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJ)
+$(NAME): $(LIBFT) $(OBJ) $(I_HEADER)
 		gcc $(OBJ) $(LINK_FLAGS) $(FRAMEWORKS) -o $(NAME)
 
 $(OBJ): | $(OBJ_DIR)

@@ -85,8 +85,8 @@ t_point			**parsing_line(t_var *var, char *line)
 		map[y] = (t_point*)malloc(sizeof(t_point) * var->width);
 		while (++x < var->width)
 		{
-			map[y][x].x = (x * var->s_max) - ((var->width * var->s_max )/ 2);
-			map[y][x].y = (y * var->s_max) - ((var->height * var->s_max )/ 2);
+			map[y][x].x = (x - (var->width)/ 2) * var->s_max;
+			map[y][x].y = (y - (var->height)/ 2) * var->s_max;
 			map[y][x].z = ft_atoi(*split) * 10;// * var->s_max;
 			//printf("x: %d y: %d z: %d\n", map[y][x].x, map[y][x].y, map[y][x].z);
 			split++;

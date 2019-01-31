@@ -44,7 +44,6 @@ typedef	struct		s_img
 	int				endian;
 }					t_img;
 
-
 typedef struct		s_color
 {
 	unsigned char	b;
@@ -75,8 +74,8 @@ typedef	struct		s_var
 	int				color;
 	int				flag;
 	int				sy;
-	int				x;
-	int				y;
+	double				x;
+	double				y;
 	int				dx;
 	int				dy;
 	int				err;

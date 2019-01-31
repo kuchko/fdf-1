@@ -54,6 +54,8 @@ static void		line_draw(t_img *img, t_var *var, t_point zero, t_point one)
 	int			steep;
 
 	steep = swapper(&(zero.x), &(zero.y), &(one.x), &(one.y));
+	(*var).x = zero.x;
+	(*var).y = zero.y;
 	(*var).dx = one.x - zero.x;
 	(*var).dy = one.y - zero.y;
 	(*var).err = ABS(2 * (*var).dy);
@@ -65,7 +67,7 @@ static void		line_draw(t_img *img, t_var *var, t_point zero, t_point one)
 		if (steep && zero.x < WIN_WIDTH && zero.y < WIN_HEIGHT)
 			pixel_put(img, var, zero.y, zero.x);
 		else if (zero.x < WIN_WIDTH && zero.y < WIN_HEIGHT)
-			pixel_put(img, var,zero.x, zero.y);
+			pixel_put(img, var, zero.x, zero.y);
 		(*var).derr += (*var).err;
 		if ((*var).derr > (*var).dx)
 			{

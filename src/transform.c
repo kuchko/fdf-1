@@ -18,7 +18,6 @@ static t_point	rotate_axis(t_point map, t_rot **rot)
 	int			z;
 	int			x;
 
-	x = map.x;
 	y = map.y;
 	z = map.z;
 	if ((*rot)->x != 0.0)
@@ -26,11 +25,15 @@ static t_point	rotate_axis(t_point map, t_rot **rot)
 		map.y = (y * cos((*rot)->x)) + (z * sin((*rot)->x));
 		map.z = -(y * sin((*rot)->x)) + (z * cos((*rot)->x));
 	}
+	x = map.x;
+	z = map.z;
 	if ((*rot)->y != 0.0)
 	{
 		map.x = (x * cos((*rot)->y)) + (z * sin((*rot)->y));
 		map.z = -(x * sin((*rot)->y)) + (z * cos((*rot)->y));
 	}
+	x = map.x;
+	y = map.y;
 	if ((*rot)->z != 0.0)
 	{
 		map.x = (x * cos((*rot)->z)) - (y * sin((*rot)->z));
