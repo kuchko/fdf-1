@@ -14,9 +14,9 @@
 
 static t_point	rotate_axis(t_point map, t_rot **rot)
 {
-	int			y;
-	int			z;
-	int			x;
+	double		y;
+	double		z;
+	double		x;
 
 	y = map.y;
 	z = map.z;

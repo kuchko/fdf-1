@@ -74,12 +74,10 @@ typedef	struct		s_var
 	int				color;
 	int				flag;
 	int				sy;
-	double				x;
-	double				y;
 	int				dx;
 	int				dy;
-	int				err;
-	int				derr;
+	double			err;
+	double			derr;
 	t_point			**map_o;
 	t_point			**map_r;
 	t_img			*img;
