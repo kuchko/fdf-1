@@ -6,7 +6,7 @@
 /*   By: vrudyka <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/17 14:51:44 by vrudyka           #+#    #+#             */
-/*   Updated: 2019/01/17 14:51:46 by vrudyka          ###   ########.fr       */
+/*   Updated: 2019/02/06 15:53:03 by vrudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,8 @@ static void		pixel_put(t_img *img, t_var *var, int x, int y)
 {
 	int			i;
 
-
-	x += ((var->width * var->s_max )/ 2);
-	y += ((var->height * var->s_max )/ 2);
+	x += ((var->width * var->s_max) / 2) + (2 * var->s_max);
+	y += ((var->height * var->s_max) / 2) + (2 * var->s_max);
 	if ((x >= 0 && x < WIN_WIDTH) && (y >= 0 && y < WIN_HEIGHT))
 	{
 		i = (y * WIN_WIDTH) + x;
@@ -34,7 +33,6 @@ static void		dy_dx(t_img *img, t_var *var, t_point zero)
 	(*var).d = (var->dy << 1) - var->dx;
 	(*var).d1 = var->dy << 1;
 	(*var).d2 = (var->dy - var->dx) << 1;
-	pixel_put(img, var, zero.y, zero.y);
 	(*var).x = zero.x + var->sx;
 	(*var).y = zero.y;
 	(*var).i = 0;
@@ -57,11 +55,10 @@ static void		dx_dy(t_img *img, t_var *var, t_point zero)
 	(*var).d = (var->dx << 1) - var->dy;
 	(*var).d1 = var->dx << 1;
 	(*var).d2 = (var->dx - var->dy) << 1;
-	pixel_put(img, var, zero.y, zero.y);
 	(*var).y = zero.y + var->sy;
 	(*var).x = zero.x;
 	(*var).i = 0;
-	while(++((*var).i) <= var->dy)
+	while (++((*var).i) <= var->dy)
 	{
 		if ((*var).d > 0)
 		{
@@ -78,7 +75,7 @@ static void		dx_dy(t_img *img, t_var *var, t_point zero)
 static void		line_draw(t_img *img, t_var *var, t_point zero, t_point one)
 {
 	var->dx = ABS((one.x - zero.x));
-	var->dy= ABS((one.y - zero.y));
+	var->dy = ABS((one.y - zero.y));
 	var->sx = (one.x >= zero.x ? 1 : -1);
 	var->sy = (one.y >= zero.y ? 1 : -1);
 	if (var->dy <= var->dx)
@@ -86,7 +83,6 @@ static void		line_draw(t_img *img, t_var *var, t_point zero, t_point one)
 	else
 		dx_dy(img, var, zero);
 }
-
 
 void			display(t_var *var)
 {
@@ -112,5 +108,5 @@ void			display(t_var *var)
 				line_draw(img, var, map[y][x], map[y + 1][x]);
 		}
 	}
-	mlx_put_image_to_window(img->mlx_ptr, img->mlx_win, img->ptr, 50, 50);
+	mlx_put_image_to_window(img->mlx_ptr, img->mlx_win, img->ptr, 0, 0);
 }

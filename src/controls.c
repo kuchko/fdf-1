@@ -6,29 +6,33 @@
 /*   By: vrudyka <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 13:41:34 by vrudyka           #+#    #+#             */
-/*   Updated: 2019/01/24 13:41:35 by vrudyka          ###   ########.fr       */
+/*   Updated: 2019/02/06 15:52:57 by vrudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int				X(void *param) //REDO
+int				termin(void *param)
 {
 	(void)param;
 	exit(0);
-	return (0);
 }
 
-int				terminate(int error)
+int				terminate(char *str)
 {
-	if (error == 70)
-		ft_putendl("No such file");
-	else if (error == 73)
-		ft_putendl("Invalid map");
-	else if (error == 85)
-		ft_putendl("usage: ./fdf [file_name.fdf]");
+	ft_putendl(str);
 	exit(0);
-	return (0);
+}
+
+void			color_assign(t_var *var, int key)
+{
+	if (key == MAIN_KEY_R)
+		var->color = 0xFF00FF;
+	else if (key == MAIN_KEY_B)
+		var->color = 0x27AEE3;
+	else if (key == MAIN_KEY_G)
+		var->color = 0x2E8B57;
+	display(var);
 }
 
 int				key_down(int key, t_var *var)
@@ -50,8 +54,8 @@ int				key_down(int key, t_var *var)
 		rotate(var, 'y', &rot);
 	else if (key == ARROW_R)
 		rotate(var, 'z', &rot);
-	// else if (key == MAIN_KEY_I)
-	// 	iso(var);
+	else if (key == MAIN_KEY_I)
+		iso(var);
 	else if (key == MAIN_KEY_R || key + MAIN_KEY_B)
 		color_assign(var, key);
 	return (0);

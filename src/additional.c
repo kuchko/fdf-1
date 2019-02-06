@@ -1,24 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   color.c                                            :+:      :+:    :+:   */
+/*   additional.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrudyka <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/25 15:08:47 by vrudyka           #+#    #+#             */
-/*   Updated: 2019/01/25 15:08:49 by vrudyka          ###   ########.fr       */
+/*   Created: 2019/02/06 17:23:13 by vrudyka           #+#    #+#             */
+/*   Updated: 2019/02/06 17:23:15 by vrudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void			color_assign(t_var *var, int key)
+void			s_max(t_var *var)
 {
-	if (key == MAIN_KEY_R)
-		var->color = 0xFF00FF;
-	else if (key == MAIN_KEY_B)
-		var->color = 0x27AEE3;
-	else if (key == MAIN_KEY_G)
-		var->color = 0x2E8B57;
-	display(var);
+	if (var->height < var->width)
+		var->s_max = WIN_HEIGHT / (var->height + 4);
+	else
+		var->s_max = WIN_WIDTH / (var->width + 4);
+	if (var->s_max > 48)
+		var->s_max = 48;
+}
+
+void			free_map(t_point **map, t_var *var)
+{
+	int			y;
+
+	y = -1;
+	while (++y < var->height)
+	{
+		free(map[y]);
+	}
+	free(map);
 }

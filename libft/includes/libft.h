@@ -150,4 +150,6 @@ int					get_next_line(const int fd, char **line);
 
 void				ft_swap(int *a, int *b);
 
+int					split_count(char **split);
+
 #endif

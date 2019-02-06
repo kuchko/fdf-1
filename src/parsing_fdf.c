@@ -6,7 +6,7 @@
 /*   By: vrudyka <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/17 13:35:23 by vrudyka           #+#    #+#             */
-/*   Updated: 2019/01/17 13:35:24 by vrudyka          ###   ########.fr       */
+/*   Updated: 2019/02/06 15:53:12 by vrudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,8 @@ static int		width_count(char *line)
 	int			i;
 	char		**split;
 
-	i = 0;
 	split = ft_strsplit(line, ' ');
-	while (split[i])
-		i++;
-	free(split);
+	i = split_count(split);
 	return (i);
 }
 
@@ -31,11 +28,12 @@ static char		*ft_strjoin_free(char *line, char *buf, int width)
 
 	point = line;
 	if (width_count(buf) != width)
-		terminate(73);
+		terminate("Invalid map");
 	line = ft_strjoin(line, " ");
+	free(point);
+	point = line;
 	line = ft_strjoin(line, buf);
 	free(point);
-	free(buf);
 	return (line);
 }
 
@@ -57,13 +55,11 @@ char			*parsing_fdf(int fd, t_var **var)
 		else
 			line = ft_strjoin_free(line, buf, width);
 		height++;
+		free(buf);
 	}
 	(*var)->width = width;
 	(*var)->height = height;
-	if ((*var)->height < (*var)->width)
-		(*var)->s_max = WIN_HEIGHT / ((*var)->height + 4);
-	else
-		(*var)->s_max = WIN_WIDTH / ((*var)->width + 4);
+	s_max((*var));
 	return (line);
 }
 
@@ -75,8 +71,7 @@ t_point			**parsing_line(t_var *var, char *line)
 	t_point		**map;
 
 	y = -1;
-	if (var->s_max > 48)
-		var->s_max = 48;
+	(*var).i = 0;
 	map = (t_point**)malloc(sizeof(t_point*) * var->height);
 	split = ft_strsplit(line, ' ');
 	while (++y < var->height)
@@ -85,12 +80,13 @@ t_point			**parsing_line(t_var *var, char *line)
 		map[y] = (t_point*)malloc(sizeof(t_point) * var->width);
 		while (++x < var->width)
 		{
-			map[y][x].x = (x - (var->width)/ 2) * var->s_max;
-			map[y][x].y = (y - (var->height)/ 2) * var->s_max;
-			map[y][x].z = ft_atoi(*split) * 10;// * var->s_max;
-			//printf("x: %d y: %d z: %d\n", map[y][x].x, map[y][x].y, map[y][x].z);
-			split++;
+			map[y][x].x = (x - (var->width) / 2) * var->s_max;
+			map[y][x].y = (y - (var->height) / 2) * var->s_max;
+			map[y][x].z = ft_atoi(split[(*var).i]) * 10;
+			(*var).i++;
 		}
 	}
+	(*var).i = split_count(split);
+	free(line);
 	return (map);
 }

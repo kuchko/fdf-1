@@ -24,7 +24,7 @@ CBJ = ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isascii.c\
 	  ft_strrchr.c ft_strsplit.c ft_strstr.c ft_strsub.c ft_strtrim.c\
 	  ft_tolower.c ft_toupper.c ft_lstadd_head.c ft_lstadd_end.c ft_lstdel.c\
 	  ft_lstdelone.c ft_lstiter.c ft_lstmap.c ft_lstnew.c get_next_line.c\
-	  ft_swap.c
+	  ft_swap.c split_count.c
 
 INCL = includes
 

@@ -22,6 +22,7 @@
 # define ARROW_L 123
 # define ARROW_R 124
 # define ARROW_UP 126
+# define MAIN_KEY_I 34
 # define MAIN_KEY_R 15
 # define MAIN_KEY_B 11
 # define MAIN_KEY_G 5
@@ -31,15 +32,13 @@
 # include "mlx.h"
 # include "math.h"
 
-# include <stdio.h> //REMOVE!
-
 typedef	struct		s_img
 {
 	void			*mlx_ptr;
 	void			*mlx_win;
 	void			*ptr;
 	char			*addr;
-	int 			bpp;
+	int				bpp;
 	int				size_line;
 	int				endian;
 }					t_img;
@@ -80,8 +79,8 @@ typedef	struct		s_var
 	int				d;
 	int				d1;
 	int				d2;
-	int					x;
-	int					y;
+	int				x;
+	int				y;
 	int				i;
 	t_point			**map_o;
 	t_point			**map_r;
@@ -94,16 +93,20 @@ t_point				**parsing_line(t_var *var, char *line);
 
 void				display(t_var *var);
 
-int					terminate(int error);
+int					terminate(char *str);
 
-int					X(void *param);
-
-int					terminate(int error);
+int					termin(void *param);
 
 int					key_down(int key, t_var *var);
 
 void				rotate(t_var *var, char axis, t_rot **rot);
 
 void				color_assign(t_var *var, int key);
+
+void				iso(t_var *var);
+
+void				s_max(t_var *var);
+
+void				free_map(t_point **map, t_var *var);
 
 #endif
