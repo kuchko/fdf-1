@@ -29,56 +29,62 @@ static void		pixel_put(t_img *img, t_var *var, int x, int y)
 	}
 }
 
+static void		dy_dx(t_img *img, t_var *var, t_point zero)
+{
+	(*var).d = (var->dy << 1) - var->dx;
+	(*var).d1 = var->dy << 1;
+	(*var).d2 = (var->dy - var->dx) << 1;
+	pixel_put(img, var, zero.y, zero.y);
+	(*var).x = zero.x + var->sx;
+	(*var).y = zero.y;
+	(*var).i = 0;
+	while (++((*var).i) <= var->dx)
+	{
+		if ((*var).d > 0)
+		{
+			(*var).d += (*var).d2;
+			(*var).y += var->sy;
+		}
+		else
+			(*var).d += (*var).d1;
+		pixel_put(img, var, (*var).x, (*var).y);
+		(*var).x += var->sx;
+	}
+}
+
+static void		dx_dy(t_img *img, t_var *var, t_point zero)
+{
+	(*var).d = (var->dx << 1) - var->dy;
+	(*var).d1 = var->dx << 1;
+	(*var).d2 = (var->dx - var->dy) << 1;
+	pixel_put(img, var, zero.y, zero.y);
+	(*var).y = zero.y + var->sy;
+	(*var).x = zero.x;
+	(*var).i = 0;
+	while(++((*var).i) <= var->dy)
+	{
+		if ((*var).d > 0)
+		{
+			(*var).d += (*var).d2;
+			(*var).x += var->sx;
+		}
+		else
+			(*var).d += (*var).d1;
+		pixel_put(img, var, (*var).x, (*var).y);
+		(*var).y += var->sy;
+	}
+}
+
 static void		line_draw(t_img *img, t_var *var, t_point zero, t_point one)
 {
-	int dx = ABS((one.x - zero.x));
-	int dy = ABS((one.y - zero.y));
-	int sx = (one.x >= zero.x ? 1 : -1);
-	int sy = (one.y >= zero.y ? 1 : -1);
-	if (dy <= dx)
-	{
-		int d = (dy << 1) - dx;
-		int d1 = dy << 1;
-		int d2 = (dy - dx) << 1;
-		pixel_put(img, var, zero.y, zero.y);
-		int x = zero.x + sx;
-		int y = zero.y;
-		int i = 0;
-		while (++i <= dx)
-		{
-			if (d > 0)
-			{
-				d += d2;
-				y += sy;
-			}
-			else
-				d += d1;
-			x += sx;
-			pixel_put(img, var, x, y);
-		}
-	}
+	var->dx = ABS((one.x - zero.x));
+	var->dy= ABS((one.y - zero.y));
+	var->sx = (one.x >= zero.x ? 1 : -1);
+	var->sy = (one.y >= zero.y ? 1 : -1);
+	if (var->dy <= var->dx)
+		dy_dx(img, var, zero);
 	else
-	{
-		int d = (dx << 1) - dy;
-		int d1 = dx << 1;
-		int d2 = (dx - dy) << 1;
-		pixel_put(img, var, zero.y, zero.y);
-		int y = zero.y + sy;
-		int	x = zero.x;
-		int i = 0;
-		while(++i <= dy)
-		{
-			if (d > 0)
-			{
-				d += d2;
-				x += sx;
-			}
-			else
-				d += d1;
-			pixel_put(img, var, x, y);
-			y += sy;
-		}
-	}
+		dx_dy(img, var, zero);
 }
 
 
@@ -86,27 +92,25 @@ void			display(t_var *var)
 {
 	int			y;
 	int			x;
+	t_img		*img;
 	t_point		**map;
 
-	y = 0;
+	y = -1;
+	img = var->img;
 	if (var->flag == 0)
 		map = var->map_o;
 	else
 		map = var->map_r;
-	while (y < var->height)
+	while (++y < var->height)
 	{
-		x = 0;
-		while (x < var->width)
+		x = -1;
+		while (++x < var->width)
 		{
 			if (x + 1 != var->width)
-			// {	printf("x: %d, y %d || x: %d y: %d\n", map[y][x].x, map[y][x].y, map[y][x + 1].x, map[y][x + 1].y);
-				line_draw(var->img, var, map[y][x], map[y][x + 1]);//}
+				line_draw(img, var, map[y][x], map[y][x + 1]);
 			if (y + 1 != var->height)
-				line_draw(var->img, var, map[y][x], map[y + 1][x]);
-			x++;
+				line_draw(img, var, map[y][x], map[y + 1][x]);
 		}
-		y++;
 	}
-	// printf("-------------------------\n-------------------------\n");
-	mlx_put_image_to_window(var->img->mlx_ptr, var->img->mlx_win, var->img->ptr, 50, 50);
+	mlx_put_image_to_window(img->mlx_ptr, img->mlx_win, img->ptr, 50, 50);
 }
