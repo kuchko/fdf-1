@@ -63,30 +63,74 @@ char			*parsing_fdf(int fd, t_var **var)
 	return (line);
 }
 
-t_point			**parsing_line(t_var *var, char *line)
+void			set_colors(t_var *var, int minZ, int maxZ)
 {
+	int			red;
+	int			blue;
+	int			green;
+	double		per;
+
 	int			y;
 	int			x;
-	char		**split;
-	t_point		**map;
+
+	var->colorMin = 0x27AEE3;
+	var->colorMax = 0xFF66CC;
 
 	y = -1;
-	(*var).i = 0;
-	map = (t_point**)malloc(sizeof(t_point*) * var->height);
-	split = ft_strsplit(line, ' ');
 	while (++y < var->height)
 	{
 		x = -1;
-		map[y] = (t_point*)malloc(sizeof(t_point) * var->width);
 		while (++x < var->width)
 		{
-			map[y][x].x = (x - (var->width) / 2) * var->s_max;
-			map[y][x].y = (y - (var->height) / 2) * var->s_max;
-			map[y][x].z = ft_atoi(split[(*var).i]) * 10;
-			(*var).i++;
+			per = percent(minZ, maxZ, var->map_r[y][x].z);
+			red = get_light((var->colorMin >> 16) & 0xFF, (var->colorMax >> 16) & 0xFF, per);
+    		green = get_light((var->colorMin >> 8) & 0xFF, (var->colorMax >> 8) & 0xFF, per);
+			blue = get_light(var->colorMin & 0xFF, var->colorMax & 0xFF, per);
+			var->map_r[y][x].color = var->map_o[y][x].color = ((red << 16) | (green << 8) | blue);
 		}
 	}
-	(*var).i = split_count(split);
+}
+
+void			parsing_line(t_var *var, char *line)
+{
+	int			i;
+	int			y;
+	int			x;
+	char		**split;
+
+	int			maxZ = 0;
+	int			minZ = 2147483647;
+
+	y = 0;
+	i = 0;
+	var->map_o = (t_point**)malloc(sizeof(t_point*) * var->height);
+	var->map_r = (t_point**)malloc(sizeof(t_point*) * var->height);
+	split = ft_strsplit(line, ' ');
+	while (y < var->height)
+	{
+		x = 0;
+		var->map_r[y] = (t_point*)malloc(sizeof(t_point) * var->width);
+		var->map_o[y] = (t_point*)malloc(sizeof(t_point) * var->width);
+		while (x < var->width)
+		{
+			var->map_r[y][x].x = var->map_o[y][x].x = (x - (var->width) / 2) * var->s_max;
+			var->map_r[y][x].y = var->map_o[y][x].y = (y - (var->height) / 2) * var->s_max;
+			var->map_r[y][x].z = var->map_o[y][x].z = ft_atoi(split[i]) * 10;
+
+			if (maxZ < var->map_r[y][x].z)
+				maxZ = var->map_r[y][x].z;
+			if (minZ > var->map_r[y][x].z)
+				minZ = var->map_r[y][x].z;
+			// if (var->map_r[y][x].z > 0)
+			// 	var->map_r[y][x].color = 0xFF66CC;
+			// else
+			// 	var->map_r[y][x].color = 0x27AEE3;
+			x++;
+			i++;
+		}
+		y++;
+	}
+	set_colors(var, minZ, maxZ);
+	i = split_count(split); //REVISE
 	free(line);
-	return (map);
 }

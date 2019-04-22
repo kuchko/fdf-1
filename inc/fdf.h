@@ -13,15 +13,18 @@
 #ifndef FDF_H
 # define FDF_H
 
-# define WIN_HEIGHT 729
-# define WIN_WIDTH 1280
-# define TURN_A 0.1125
-# define X_MASK 0
+# define WIN_HEIGHT	729
+# define WIN_WIDTH	1280
+# define TURN_A		0.1125
+# define X_MASK		0
 
-# define ESC 53
-# define ARROW_L 123
-# define ARROW_R 124
-# define ARROW_UP 126
+# define ESC		53
+# define NUM_2		84
+# define NUM_4		86
+# define NUM_6		88
+# define NUM_7		89
+# define NUM_8		91
+# define NUM_9		92
 # define MAIN_KEY_I 34
 # define MAIN_KEY_R 15
 # define MAIN_KEY_B 11
@@ -31,6 +34,8 @@
 # include <fcntl.h>
 # include "mlx.h"
 # include "math.h"
+
+# include <stdio.h>
 
 typedef	struct		s_img
 {
@@ -56,6 +61,7 @@ typedef	struct		s_point
 	int				x;
 	int				y;
 	int				z;
+	int				color;
 }					t_point;
 
 typedef	struct		s_rot
@@ -71,7 +77,8 @@ typedef	struct		s_var
 	int				width;
 	int				s_max;
 	int				color;
-	int				flag;
+	int				colorMin;
+	int				colorMax;
 	int				dx;
 	int				dy;
 	int				sx;
@@ -81,7 +88,8 @@ typedef	struct		s_var
 	int				d2;
 	int				x;
 	int				y;
-	int				i;
+	int				scale_x;
+	int				scale_y;
 	t_point			**map_o;
 	t_point			**map_r;
 	t_img			*img;
@@ -89,7 +97,7 @@ typedef	struct		s_var
 
 char				*parsing_fdf(int fd, t_var **var);
 
-t_point				**parsing_line(t_var *var, char *line);
+void				parsing_line(t_var *var, char *line);
 
 void				display(t_var *var);
 
@@ -108,5 +116,13 @@ void				iso(t_var *var);
 void				s_max(t_var *var);
 
 void				free_map(t_point **map, t_var *var);
+
+int					update(t_var *var);
+
+int					get_color(t_var *var, t_point start, t_point end);
+
+double				percent(int start, int end, int current);
+
+int					get_light(int start, int end, double percentage);
 
 #endif

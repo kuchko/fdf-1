@@ -12,6 +12,21 @@
 
 #include "fdf.h"
 
+t_point			**map_memalloc(t_var *var)
+{
+	int			y;
+	t_point		**map;
+
+	y = 0;
+	map = (t_point**)malloc(sizeof(t_point*) * var->height);
+	while (y < var->height)
+	{
+		map[y] = (t_point*)malloc(sizeof(t_point) * var->width);
+		y++;
+	}
+	return (map);
+}
+
 void			s_max(t_var *var)
 {
 	if (var->height < var->width)
