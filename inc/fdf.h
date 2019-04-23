@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   fdf.h                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vrudyka <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/12 16:20:58 by vrudyka           #+#    #+#             */
-/*   Updated: 2018/12/12 16:21:00 by vrudyka          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef FDF_H
 # define FDF_H
 
@@ -95,34 +83,34 @@ typedef	struct		s_var
 	t_img			*img;
 }					t_var;
 
-char				*parsing_fdf(int fd, t_var **var);
+t_var       		*init_var(int fd, char *str);
 
-void				parsing_line(t_var *var, char *line);
+t_img				*init_img(char *str);
 
-void				display(t_var *var);
+void				key_init(t_var *var);
+
+int					update(t_var *var);
+
+void				s_max(t_var *var);
+
+int					termin(void *param);
 
 int					terminate(char *str);
 
-int					termin(void *param);
+void				parsing_line(t_var *var, char *line);
+
+char				*parsing_fdf(int fd, t_var **var);
+
+void				set_colors(t_var *var, int minZ, int maxZ);
+
+void				display(t_var *var);
+
+int             	get_color(t_var *var, t_point start, t_point end);
 
 int					key_down(int key, t_var *var);
 
 void				rotate(t_var *var, char axis, t_rot **rot);
 
-void				color_assign(t_var *var, int key);
-
 void				iso(t_var *var);
-
-void				s_max(t_var *var);
-
-void				free_map(t_point **map, t_var *var);
-
-int					update(t_var *var);
-
-int					get_color(t_var *var, t_point start, t_point end);
-
-double				percent(int start, int end, int current);
-
-int					get_light(int start, int end, double percentage);
 
 #endif

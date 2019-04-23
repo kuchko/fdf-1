@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   line_draw.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vrudyka <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/17 14:51:44 by vrudyka           #+#    #+#             */
-/*   Updated: 2019/02/06 15:53:03 by vrudyka          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "fdf.h"
 
 static void		pixel_put(t_img *img, t_var *var, int x, int y)
@@ -56,6 +44,7 @@ static void		dy_dx(t_img *img, t_var *var, t_point zero, t_point one)
 static void		dx_dy(t_img *img, t_var *var, t_point zero, t_point one)
 {
 	int			i;
+	
 	(*var).d = (var->dx << 1) - var->dy;
 	(*var).d1 = var->dx << 1;
 	(*var).d2 = (var->dx - var->dy) << 1;
