@@ -56,7 +56,7 @@ make
 ![iso](https://github.com/vrudyka/fdf/blob/master/img/elem.png)
 
 <p align="center">
-  <b>Paralel projection</b>
+  <b>Paralel projection in motion</b>
 </p>
 
-
+![paralel](https://github.com/vrudyka/fdf/blob/master/img/anim.gif)
