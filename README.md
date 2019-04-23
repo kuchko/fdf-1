@@ -12,7 +12,7 @@ Each number corresponds to a point in space:
 
 <b>How to launch:</b>
 ```bash
-git clone https://github.com/vrudyka/fdf/
+git clone https://github.com/vrudyka/fdf.git
 cd fdf
 make
 ./fdf ./test_maps/42.fdf
