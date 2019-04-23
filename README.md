@@ -59,4 +59,4 @@ make
   <b>Paralel projection</b>
 </p>
 
-![paralel](https://github.com/vrudyka/fdf/blob/master/img/42.gif)
+
