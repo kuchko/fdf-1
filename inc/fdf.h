@@ -1,6 +1,13 @@
 #ifndef FDF_H
 # define FDF_H
 
+# include <libft.h>
+# include <fcntl.h>
+# include "mlx.h"
+# include "math.h"
+
+# include <stdio.h>
+
 # define WIN_HEIGHT	729
 # define WIN_WIDTH	1280
 # define TURN_A		0.1125
@@ -17,13 +24,6 @@
 # define MAIN_KEY_R 15
 # define MAIN_KEY_B 11
 # define MAIN_KEY_G 5
-
-# include <libft.h>
-# include <fcntl.h>
-# include "mlx.h"
-# include "math.h"
-
-# include <stdio.h>
 
 typedef	struct		s_img
 {

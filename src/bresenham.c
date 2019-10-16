@@ -20,49 +20,49 @@ static void		dy_dx(t_img *img, t_var *var, t_point zero, t_point one)
 {
 	int			i;
 
-	(*var).d = (var->dy << 1) - var->dx;
-	(*var).d1 = var->dy << 1;
-	(*var).d2 = (var->dy - var->dx) << 1;
-	(*var).x = zero.x + var->sx;
-	(*var).y = zero.y;
+	var->d = (var->dy << 1) - var->dx;
+	var->d1 = var->dy << 1;
+	var->d2 = (var->dy - var->dx) << 1;
+	var->x = zero.x + var->sx;
+	var->y = zero.y;
 	i = 0;
 	while (++i <= var->dx)
 	{
-		if ((*var).d > 0)
+		if (var->d > 0)
 		{
-			(*var).d += (*var).d2;
-			(*var).y += var->sy;
+			var->d += var->d2;
+			var->y += var->sy;
 		}
 		else
-			(*var).d += (*var).d1;
+			var->d += var->d1;
 		var->color = get_color(var, zero, one);
-		pixel_put(img, var, (*var).x, (*var).y);
-		(*var).x += var->sx;
+		pixel_put(img, var, var->x, var->y);
+		var->x += var->sx;
 	}
 }
 
 static void		dx_dy(t_img *img, t_var *var, t_point zero, t_point one)
 {
 	int			i;
-	
-	(*var).d = (var->dx << 1) - var->dy;
-	(*var).d1 = var->dx << 1;
-	(*var).d2 = (var->dx - var->dy) << 1;
-	(*var).y = zero.y + var->sy;
-	(*var).x = zero.x;
+
+	var->d = (var->dx << 1) - var->dy;
+	var->d1 = var->dx << 1;
+	var->d2 = (var->dx - var->dy) << 1;
+	var->y = zero.y + var->sy;
+	var->x = zero.x;
 	i = 0;
 	while (++i <= var->dy)
 	{
-		if ((*var).d > 0)
+		if (var->d > 0)
 		{
-			(*var).d += (*var).d2;
-			(*var).x += var->sx;
+			var->d += var->d2;
+			var->x += var->sx;
 		}
 		else
-			(*var).d += (*var).d1;
+			var->d += var->d1;
 		var->color = get_color(var, zero, one);
-		pixel_put(img, var, (*var).x, (*var).y);
-		(*var).y += var->sy;
+		pixel_put(img, var, var->x, var->y);
+		var->y += var->sy;
 	}
 }
 

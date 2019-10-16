@@ -1,1 +1,7 @@
+./fdf
+obj/
+
 .DS_Store
+
+libft/*.o
+libft/*.a
